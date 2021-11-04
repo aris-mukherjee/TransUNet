@@ -53,10 +53,10 @@ class Synapse_dataset(Dataset):
         self.sample_list = open(os.path.join(list_dir, self.split+'.txt')).readlines()
         self.data_dir = base_dir
 
-    def __len__(self):
+    def __len__(self):     #allows to call len(dataset)
         return len(self.sample_list)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx):   #allows to index specific items of the dataset
         if self.split == "train":
             slice_name = self.sample_list[idx].strip('\n')
             data_path = os.path.join(self.data_dir, slice_name+'.npz')
@@ -69,7 +69,7 @@ class Synapse_dataset(Dataset):
             image, label = data['image'][:], data['label'][:]
 
         sample = {'image': image, 'label': label}
-        if self.transform:
+        if self.transform:   #if transform is not None, then apply these transformations
             sample = self.transform(sample)
         sample['case_name'] = self.sample_list[idx].strip('\n')
         return sample
